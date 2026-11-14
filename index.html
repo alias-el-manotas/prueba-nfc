@@ -1,9 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba NFC Escolar</title>
+</head>
+<body>
+
+    <h1>Búsqueda rápida NFC</h1>
+
+    <button id="btn">
+        Escanear NFC
+    </button>
+
+    <div id="resultado">
+        Esperando lectura...
+    </div>
+
 <script>
 
 document.getElementById("btn").addEventListener("click", async () => {
 
-    const resultado =
-        document.getElementById("resultado");
+    const resultado = document.getElementById("resultado");
 
     const registros = {
         "1d:7c:46:02:12:10:80": {
@@ -22,18 +40,15 @@ document.getElementById("btn").addEventListener("click", async () => {
 
         await ndef.scan();
 
-        resultado.innerHTML =
-            "Acerca una etiqueta NFC";
+        resultado.innerHTML = "Acerca una etiqueta NFC";
 
         ndef.addEventListener("reading", event => {
 
-            const uid =
-                event.serialNumber.toLowerCase();
+            const uid = event.serialNumber.toLowerCase();
 
-            const persona =
-                registros[uid];
+            const persona = registros[uid];
 
-            if(persona){
+            if (persona) {
 
                 resultado.innerHTML = `
                     <h2>${persona.nombre}</h2>
@@ -43,8 +58,8 @@ document.getElementById("btn").addEventListener("click", async () => {
                     <p><b>Alergias:</b> ${persona.alergias}</p>
                     <p><b>Condición médica:</b> ${persona.condicion}</p>
                 `;
-            }
-            else{
+
+            } else {
 
                 resultado.innerHTML = `
                     <h2>Etiqueta no registrada</h2>
@@ -55,13 +70,14 @@ document.getElementById("btn").addEventListener("click", async () => {
 
         });
 
-    }
-    catch(error){
+    } catch(error) {
 
-        resultado.innerHTML =
-            error.message;
+        resultado.innerHTML = "Error: " + error.message;
     }
 
 });
 
 </script>
+
+</body>
+</html>
