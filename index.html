@@ -47,3 +47,71 @@ document.getElementById("btn").addEventListener("click", async () => {
 
 </body>
 </html>
+
+<script>
+
+document.getElementById("btn").addEventListener("click", async () => {
+
+    const resultado =
+        document.getElementById("resultado");
+
+    const registros = {
+        "1d:7c:46:02:12:10:80": {
+            tipo: "Alumno",
+            nombre: "Alumno de prueba",
+            grupo: "Kinder A",
+            sangre: "O+",
+            alergias: "Ninguna",
+            condicion: "Ninguna"
+        }
+    };
+
+    try {
+
+        const ndef = new NDEFReader();
+
+        await ndef.scan();
+
+        resultado.innerHTML =
+            "Acerca una etiqueta NFC";
+
+        ndef.addEventListener("reading", event => {
+
+            const uid =
+                event.serialNumber.toLowerCase();
+
+            const persona =
+                registros[uid];
+
+            if(persona){
+
+                resultado.innerHTML = `
+                    <h2>${persona.nombre}</h2>
+                    <p><b>Tipo:</b> ${persona.tipo}</p>
+                    <p><b>Grupo:</b> ${persona.grupo}</p>
+                    <p><b>Tipo de sangre:</b> ${persona.sangre}</p>
+                    <p><b>Alergias:</b> ${persona.alergias}</p>
+                    <p><b>Condición médica:</b> ${persona.condicion}</p>
+                `;
+            }
+            else{
+
+                resultado.innerHTML = `
+                    <h2>Etiqueta no registrada</h2>
+                    <p>UID detectado:</p>
+                    <p>${uid}</p>
+                `;
+            }
+
+        });
+
+    }
+    catch(error){
+
+        resultado.innerHTML =
+            error.message;
+    }
+
+});
+
+</script>
